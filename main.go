@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
@@ -108,6 +109,7 @@ func renderTemplate(c *gin.Context, tmplPath string, data interface{}) {
 func getDB() *sql.DB {
 	// Get database DSN from environment variable
 	dsn := os.Getenv("PG_DSN")
+	fmt.Println(">dsn: ", dsn)
 	if dsn == "" {
 		fmt.Println("Please set the PG_DSN environment variable.")
 		return nil
@@ -136,6 +138,12 @@ func getDB() *sql.DB {
 }
 
 func main() {
+	//Load .env
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
 	// Initialize Gin router
 	r := gin.Default()
 
@@ -306,4 +314,6 @@ func main() {
 	}
 	log.Printf("Server started on port %s", port)
 	r.Run(":" + port)
+	r.Run("https://gin-hackernews-clone--jimenezc9356-rt286zet.leapcell.dev")
+
 }
